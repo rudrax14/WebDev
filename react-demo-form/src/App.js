@@ -14,7 +14,7 @@ function App() {
     comments: false,
     candidate: false,
     offers: false,
-    pushNotification: ""
+    pushNotification:""
   });
 
   function changeHandler(event) {
@@ -24,18 +24,9 @@ function App() {
     });
   }
 
-
-
-  function submitHandler(event) {
-    event.preventDefault();
-    console.log("data submit");
-    console.log(formData);
-
-  }
-
   return (
     <div className="flex flex-col items-center mt-2">
-      <form onSubmit={submitHandler}>
+      <form>
         <label htmlFor="firstName">First Name</label>
         <br />
         <input
@@ -78,6 +69,7 @@ function App() {
         <select
           name="country"
           id="country"
+          country
           value={formData.country}
           onChange={changeHandler}
         >
@@ -199,9 +191,6 @@ function App() {
           <input type="radio" id="pushNothing" name="pushNotification" value="No Push Notification" onChange={changeHandler} />
           <label htmlFor="pushNothing">No Push Notification</label>
         </fieldset>
-
-
-        <button className="bg-blue-500 text-white font-bold rounder py-2 px-4" onClick={submitHandler}>Submit</button>
       </form>
     </div>
   );
