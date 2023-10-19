@@ -5,12 +5,9 @@ import Login from "./Pages/Login";
 import NotFound from "./Pages/NotFound";
 import Signup from "./Pages/Signup";
 import Navbar from "./components/Navbar";
+import PrivateRoute from "./components/PrivateRoute";
 import { useState } from "react";
-import {
-  Routes,
-  Route,
-
-} from "react-router-dom";
+import { Routes, Route, } from "react-router-dom";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
@@ -19,9 +16,11 @@ function App() {
       <Routes>
         <Route>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+          <PrivateRoute isLoggedIn={isLoggedIn}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </PrivateRoute>
           <Route path="*" element={<NotFound />}
           />
 

@@ -9,7 +9,7 @@ function Template({ title, description1, description2, formType, setIsLoggedIn }
                 <p>{description1}</p>
                 <p>{description2}</p>
             </div>
-            {formType === 'login' ? (<LoginForm setIsLoggedIn={setIsLoggedIn} />) : (<SignupForm />)}
+            {formType === 'login' ? (<LoginForm setIsLoggedIn={setIsLoggedIn} />) : (<SignupForm setIsLoggedIn={setIsLoggedIn} />)}
         </div>
     )
 }
