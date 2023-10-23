@@ -4,10 +4,10 @@ import Page2 from './Page2'
 function Page1() {
     const { app } = useContext(AppContext)
     return (
-        <div>
+        <div className=' text-yellow-400'>
 
             <div>page1</div>
-            <div>{app}</div>
+            <div >{app}</div>
             <Page2 />
         </div>
 
