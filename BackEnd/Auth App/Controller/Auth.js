@@ -1,7 +1,10 @@
 const bcrypt = require('bcrypt');
-const User = require("../models/users");
+const User = require("../Models/User");
 const jwt = require("jsonwebtoken")
 
+require("dotenv").config()
+
+// Sign up route handler
 exports.signup = async (req, res) => {
     try {
         // get data
@@ -17,10 +20,10 @@ exports.signup = async (req, res) => {
             })
         }
 
-        // Secured password // using bcrypt
+        // Secured password 
         let hashedPassword;
         try {
-            hashedPassword = await bcrypt.hash(password, 10); // 10 => Rounds
+            hashedPassword = await bcrypt.hash(password, 10);
         }
         catch (err) {
             return res.status(500).json({
@@ -31,13 +34,13 @@ exports.signup = async (req, res) => {
 
         // Create Entry for User
         let user = await User.create({
-            name, email, password: hashedPassword, role
+            name,email,password:hashedPassword,role
         });
 
         return res.status(200).json({
-            success: true,
-            message: "User Created Successfully",
-            data: user
+            success : true,
+            message : "User Created Successfully",
+            data : user
         });
     }
     catch (err) {
@@ -50,38 +53,41 @@ exports.signup = async (req, res) => {
 }
 
 // Login
-exports.login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        if (!email || !password) {
+exports.login = async (req,res) => {
+    try
+    {
+        const {email,password} = req.body;
+        if(!email || !password)
+        {
             return res.status(400).json({
-                success: false,
-                message: "Please fill all the details carefully",
+                success:false,
+                message : "Please fill all the details carefully",
             })
         }
 
         // check for register user 
-        let user = await User.findOne({ email });
-        if (!user) {
+        let user = await User.findOne({email});
+        if(!user)
+        {
             return res.status(401).json({
-                success: false,
-                message: "User does not exist",
+                success : false,
+                message : "User does not exist",
             });
         }
 
         // Verify password & generate a JWT token
 
         const payload = {
-            email: user.email,
-            id: user._id,
-            role: user.role,
+            email : user.email,
+            id : user._id,
+            role : user.role,
         };
 
 
-        if (await bcrypt.compare(password, user.password)) {
+        if(await bcrypt.compare(password,user.password)){
             // password match
-            let token = jwt.sign(payload, process.env.JWT_SECRET, {
-                expiresIn: "2h",
+            let token = jwt.sign(payload,process.env.JWT_SECRET,{
+                expiresIn : "2h",
             });
 
             user = user.toObject();
@@ -89,8 +95,8 @@ exports.login = async (req, res) => {
             user.password = undefined;
 
             const options = {
-                expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-                httpOnly: true,
+                expires : new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                httpOnly : true,
             }
 
             // res.cookie("token",token,options).status(200).json({
@@ -101,52 +107,25 @@ exports.login = async (req, res) => {
             // });
 
             res.status(200).json({
-                success: true,
+                success : true,
                 token,
                 user,
-                message: "User loged in successfully"
+                message:"User loged in successfully"
             });
         }
         else {
             // password not match
             return res.status(403).json({
-                success: false,
-                message: "Password does not match",
+                success : false,
+                message : "Password does not match",
             })
         }
     }
-    catch (err) {
+    catch(err){
         console.error(err)
         return res.status(500).json({
-            success: false,
-            message: "Login false"
+            success : false,
+            message : "Login false" 
         })
-    }
-}
-
-// delete user
-
-exports.deleteUser = async (req, res) => {
-    try {
-        const { email } = req.body;
-
-        // check if user already exist 
-        const existingUser = await User.findOneAndDelete({ email });
-
-        if (existingUser.email !== email) {
-
-            return res.status(400).json({
-                success: false,
-                message: "User does not exist",
-            })
-        }
-
-    } catch (err) {
-        console.error(err)
-        return res.status(500).json({
-            success: false,
-            message: "Delete false"
-        })
-
     }
 }
