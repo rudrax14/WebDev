@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
-const User = require("../Models/User");
+const User = require("../models/users");
+
 
 exports.signup = async (req, res) => {
     try {
@@ -122,5 +123,32 @@ exports.login = async (req, res) => {
             success: false,
             message: "Login false"
         })
+    }
+}
+
+// delete user
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // check if user already exist 
+        const existingUser = await User.findOneAndDelete({ email });
+
+        if (existingUser.email !== email) {
+
+            return res.status(400).json({
+                success: false,
+                message: "User does not exist",
+            })
+        }
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            success: false,
+            message: "Delete false"
+        })
+
     }
 }
