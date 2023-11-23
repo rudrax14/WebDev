@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require("../models/users");
-
+const jwt = require("jsonwebtoken")
 
 exports.signup = async (req, res) => {
     try {
@@ -71,7 +71,6 @@ exports.login = async (req, res) => {
 
         // Verify password & generate a JWT token
 
-        //containts 
         const payload = {
             email: user.email,
             id: user._id,
@@ -79,7 +78,7 @@ exports.login = async (req, res) => {
         };
 
 
-        if (await bcrypt.compare(password, user.password)) {  // .compare for check password
+        if (await bcrypt.compare(password, user.password)) {
             // password match
             let token = jwt.sign(payload, process.env.JWT_SECRET, {
                 expiresIn: "2h",
@@ -89,7 +88,6 @@ exports.login = async (req, res) => {
             user.token = token;
             user.password = undefined;
 
-            // cookie 
             const options = {
                 expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
                 httpOnly: true,
