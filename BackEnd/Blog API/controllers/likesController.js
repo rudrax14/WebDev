@@ -14,6 +14,7 @@ exports.likePost = async (req, res) => {
     const savedLike = await like.save();
 
     // Update Post Collection basis on this
+    // $push // array update operator
     const updatedPost = await Post.findByIdAndUpdate(
       post,
       { $push: { likes: savedLike._id } },
