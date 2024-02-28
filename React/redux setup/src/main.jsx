@@ -8,8 +8,8 @@ import { store } from './redux/Store.jsx' // importing store from redux
 ReactDOM.createRoot(document.getElementById('root')).render(
   // wrapping the App component with Provider to provide the store to the App component
   <Provider store={store}>
-    <React.StrictMode>
+    {/* <React.StrictMode> */}
       <App />
-    </React.StrictMode>
+    {/* </React.StrictMode> */}
   </Provider>
 )
